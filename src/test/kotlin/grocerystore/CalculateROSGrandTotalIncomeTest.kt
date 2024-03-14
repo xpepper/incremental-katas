@@ -9,7 +9,9 @@ class CalculateROSGrandTotalIncomeTest {
     @Test
     fun `read a simple ROS file with just one entry`() {
         val rosFile = File.createTempFile("ros", ".txt").apply {
-            writeText("bread, 1, 2")
+            writeText("""
+                bread, 1, 2
+                """.trimIndent())
         }
 
         val gti = RecordOfSales(rosFile.absolutePath).computeGrandTotalIncome()
@@ -18,14 +20,3 @@ class CalculateROSGrandTotalIncomeTest {
     }
 }
 
-class RecordOfSales(private val rosFilePath: String) {
-    fun computeGrandTotalIncome(): Long {
-        var gti: Long = 0
-        File(rosFilePath).forEachLine {
-            val (product, quantity, price) = it.split(", ")
-            gti += quantity.toLong() * price.toLong()
-        }
-        return gti
-    }
-
-}
