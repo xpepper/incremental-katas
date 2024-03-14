@@ -4,8 +4,8 @@ import java.io.File
 
 class RecordOfSales(private val rosFilePath: String) {
     fun computeGrandTotalIncome(): Long = File(rosFilePath).readLines()
-        .map {
-            val (product, quantity, price) = it.split(", ")
+        .map { entry ->
+            val (product, quantity, price) = entry.split(", ").map { it.trim() }
             quantity.toLong() * price.toLong()
         }.sum()
 

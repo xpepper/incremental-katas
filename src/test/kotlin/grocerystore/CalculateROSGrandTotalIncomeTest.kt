@@ -32,6 +32,18 @@ class CalculateROSGrandTotalIncomeTest {
         gti shouldBe (1 * 2) + (1 * 2) + (4 * 8) + (10 * 10)
     }
 
+    @Test
+    fun `parse ROS file with commas in the product name`() {
+        val rosFile = writeRosFileWith(
+            """
+            tomatoes, 12, 3
+            bananas, 3, 1 
+            """
+        )
+
+        RecordOfSales(rosFile.absolutePath).computeGrandTotalIncome()
+    }
+
     private fun writeRosFileWith(fileContent: String) = File.createTempFile("ros", ".txt").apply {
         writeText(fileContent.trimIndent())
     }.also { it.deleteOnExit() }
