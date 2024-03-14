@@ -5,6 +5,16 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class CalculateROSGrandTotalIncomeTest {
+    @Test
+    fun `gti is zero if the ros file is empty`() {
+        val rosFile = File.createTempFile("ros", ".txt").apply {
+            writeText("".trimIndent())
+        }.also { it.deleteOnExit() }
+
+        val gti = RecordOfSales(rosFile.absolutePath).computeGrandTotalIncome()
+
+        gti shouldBe 0
+    }
 
     @Test
     fun `read a simple ROS file with multiple entries`() {
