@@ -12,7 +12,7 @@ class CalculateROSGrandTotalIncomeTest {
             writeText("""
                 bread, 1, 2
                 """.trimIndent())
-        }
+        }.also { it.deleteOnExit() }
 
         val gti = RecordOfSales(rosFile.absolutePath).computeGrandTotalIncome()
 
