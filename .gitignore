@@ -1,0 +1,10 @@
+.gradle
+build/
+
+.idea/
+*.iws
+out/
+.idea_modules/
+
+# Ignore Gradle build output directory
+build
