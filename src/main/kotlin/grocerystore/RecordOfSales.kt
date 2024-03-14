@@ -5,16 +5,18 @@ import java.io.File
 private val quantityAndPriceRegex = Regex("""(\d+),\s*(\d+)$""")
 
 class RecordOfSales(rosFilePath: String) {
-    private val rosFile = File(rosFilePath)
+    private val entries: List<Entry> = compute(File(rosFilePath))
 
-    fun computeGrandTotalIncome(): Long {
-        return rosFile.readLines()
-            .map { entry ->
-                val groups = quantityAndPriceRegex.find(entry)?.groups
-                val quantity = groups?.get(1)?.value?.toLong() ?: 0
-                val price = groups?.get(2)?.value?.toLong() ?: 0
-                quantity * price
-            }.sum()
+    fun computeGrandTotalIncome(): Long = entries.sumOf { entry -> entry.quantity * entry.price }
+
+    private fun compute(rosFile: File): List<Entry> = rosFile.readLines().map(::parse)
+
+    private fun parse(rawEntry: String): Entry {
+        val groups = quantityAndPriceRegex.find(rawEntry)?.groups
+        val quantity = groups?.get(1)?.value?.toLong() ?: 0
+        val price = groups?.get(2)?.value?.toLong() ?: 0
+        return Entry(quantity, price)
     }
 
+    private data class Entry(val quantity: Long, val price: Long)
 }
