@@ -12,10 +12,11 @@ class RecordOfSales(rosFilePath: String) {
     private fun parseToEntries(rosFile: File): List<Entry> = rosFile.readLines().map(::parse)
 
     private fun parse(rawEntry: String): Entry {
-        val groups = quantityAndPriceRegex.find(rawEntry)?.groups
-        val product = groups?.get(1)?.value?.trim() ?: throw InvalidContentException(rawEntry)
-        val quantity = groups?.get(2)?.value?.toLong() ?: 0
-        val price = groups?.get(3)?.value?.toLong() ?: 0
+        val groups = quantityAndPriceRegex.find(rawEntry)?.groups ?: throw InvalidContentException(rawEntry)
+
+        val product = groups[1]?.value?.trim() ?: throw InvalidContentException(rawEntry)
+        val quantity = groups[2]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
+        val price = groups[3]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
         return Entry(product, quantity, price)
     }
 
