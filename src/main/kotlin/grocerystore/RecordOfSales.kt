@@ -37,8 +37,6 @@ class RecordOfSales(rosFilePath: String) {
                 .filter { it.isNotEmpty() }
                 .map { it.split(", ") }
                 .map { ProductFamily(it[0]) to Category(it[1]) }
-
-
     }
 }
 
