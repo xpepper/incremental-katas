@@ -1,5 +1,6 @@
 package grocerystore
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -66,6 +67,18 @@ class CalculateROSGrandTotalIncomeTest {
            drinks: 0
            total: 6
         """.trimIndent()
+    }
+
+    @Test
+    fun `fails when cannot parse a ROS entry`() {
+        val invalidRosFile = writeRosFileWith(
+            """
+            invalid entry
+            """
+        )
+        shouldThrow<InvalidContentException> {
+            RecordOfSales(invalidRosFile.absolutePath)
+        }.message shouldBe "Invalid entry 'invalid entry' found in the ROS file."
     }
 
     private fun writeRosFileWith(fileContent: String) = File.createTempFile("ros", ".txt").apply {

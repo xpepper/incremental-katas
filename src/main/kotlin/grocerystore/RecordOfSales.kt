@@ -13,7 +13,7 @@ class RecordOfSales(rosFilePath: String) {
 
     private fun parse(rawEntry: String): Entry {
         val groups = quantityAndPriceRegex.find(rawEntry)?.groups
-        val product = groups?.get(1)?.value?.trim() ?: ""
+        val product = groups?.get(1)?.value?.trim() ?: throw InvalidContentException(rawEntry)
         val quantity = groups?.get(2)?.value?.toLong() ?: 0
         val price = groups?.get(3)?.value?.toLong() ?: 0
         return Entry(product, quantity, price)
@@ -26,7 +26,8 @@ class RecordOfSales(rosFilePath: String) {
     class CategorizedRecordOfSales(private val recordOfSales: RecordOfSales, private val rawCategories: String) {
         fun generateReport(): String = categoriesFrom(rawCategories).joinToString("\n") { category ->
             recordOfSales.entries.filter {
-                it.product.contains(category.first.name)
+                val product = it.product
+                product.contains(category.first.name)
             }.sumOf { it.quantity * it.price }.let {
                 "${category.second.name}: $it"
             }
