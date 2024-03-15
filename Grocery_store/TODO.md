@@ -1,5 +1,6 @@
 # TODO
 
+- [FIX] duplicated categories
 - [F?] compute grand total income (GTI) from multiple ROS files
 - [R] CategorizedRecordOfSales extends from RecordOfSales?
 - [F] quantity should be > 0
