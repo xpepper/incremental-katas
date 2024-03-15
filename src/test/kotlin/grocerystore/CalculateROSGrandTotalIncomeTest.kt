@@ -49,25 +49,6 @@ class CalculateROSGrandTotalIncomeTest {
     }
 
     @Test
-    fun `list all the products in the ROS file`() {
-        val rosFile = writeRosFileWith(
-            """
-            twixies (1 whole box, 3 rows, 5 per row), 1, 20
-            cheese (gouda, 1Kg), 1, 5
-            bacon ("tasty" brand, 3 pack), 2, 7
-            apples (red, 1Kg bag), 1, 2
-            """
-        )
-
-        RecordOfSales(rosFile.absolutePath).allProducts() shouldBe listOf(
-            "twixies (1 whole box, 3 rows, 5 per row)",
-            "cheese (gouda, 1Kg)",
-            "bacon (\"tasty\" brand, 3 pack)",
-            "apples (red, 1Kg bag)"
-        )
-    }
-
-    @Test
     fun `generate the total amount of money for a single entry and two categories`() {
         val rosFile = writeRosFileWith(
             """

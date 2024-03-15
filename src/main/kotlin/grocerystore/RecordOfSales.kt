@@ -9,8 +9,6 @@ class RecordOfSales(rosFilePath: String) {
 
     fun computeGrandTotalIncome(): Long = entries.sumOf { entry -> entry.quantity * entry.price }
 
-    fun allProducts(): List<String> = entries.map { it.product }
-
     private fun parseToEntries(rosFile: File): List<Entry> = rosFile.readLines().map(::parse)
 
     private fun parse(rawEntry: String): Entry {
