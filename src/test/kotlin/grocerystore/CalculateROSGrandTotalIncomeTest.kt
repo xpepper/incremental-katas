@@ -50,7 +50,7 @@ class CalculateROSGrandTotalIncomeTest {
     }
 
     @Test
-    fun `generate the total amount of money for a single entry and two categories`() {
+    fun `generate the category report for a single entry and two categories`() {
         val rosFile = writeRosFileWith(
             """
             bread, 3, 2
@@ -70,6 +70,30 @@ class CalculateROSGrandTotalIncomeTest {
     }
 
     @Test
+    fun `generate the category report even when some categories are missing`() {
+        val rosFile = writeRosFileWith(
+            """
+            bread, 1, 2
+            12-pack of eggs, 1, 2
+            milk (1L), 4, 8
+            coca cola (33cl), 10, 10
+            orange juice (1L), 2, 3
+            """
+        )
+
+        RecordOfSales(rosFile.absolutePath).withCategories(
+            """
+            bread, wheat and pasta
+            juice, drinks
+            """
+        ).generateReport() shouldBe """
+            wheat and pasta: 2
+            drinks: 6
+            total: 142
+        """.trimIndent()
+    }
+
+    @Test
     fun `fails when cannot parse a ROS entry`() {
         val invalidRosFile = writeRosFileWith(
             """
@@ -85,4 +109,3 @@ class CalculateROSGrandTotalIncomeTest {
         writeText(fileContent.trimIndent())
     }.also { it.deleteOnExit() }
 }
-
