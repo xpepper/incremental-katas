@@ -34,12 +34,12 @@ class RecordOfSales(rosFilePath: String) {
             }
         } + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
 
-        private fun categoriesFrom(rawCategories: String): List<Pair<ProductItem, Category>> =
+        private fun categoriesFrom(rawCategories: String): List<Pair<ProductFamily, Category>> =
             rawCategories.split("\n")
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
                 .map { it.split(", ") }
-                .map { ProductItem(it[0]) to Category(it[1]) }
+                .map { ProductFamily(it[0]) to Category(it[1]) }
     }
 }
 
@@ -47,4 +47,4 @@ class RecordOfSales(rosFilePath: String) {
 value class Category(internal val name: String)
 
 @JvmInline
-value class ProductItem(internal val name: String)
+value class ProductFamily(internal val name: String)
