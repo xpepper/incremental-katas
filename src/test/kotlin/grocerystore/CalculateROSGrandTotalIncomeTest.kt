@@ -83,6 +83,7 @@ class CalculateROSGrandTotalIncomeTest {
         ).generateReport() shouldBe """
            wheat and pasta: 6
            drinks: 0
+           total: 6
         """.trimIndent()
     }
 

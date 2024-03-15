@@ -32,7 +32,7 @@ class RecordOfSales(rosFilePath: String) {
             }.sumOf { it.quantity * it.price }.let {
                 "${category.second.name}: $it"
             }
-        }
+        } + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
 
         private fun categoriesFrom(rawCategories: String): List<Pair<ProductItem, Category>> =
             rawCategories.split("\n")
