@@ -33,11 +33,12 @@ class RecordOfSales(rosFilePath: String) {
 
         private fun categoriesFrom(rawCategories: String): Map<Category, List<ProductFamily>> =
             rawCategories.split("\n")
+                .asSequence()
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
                 .map { it.split(", ") }
                 .map { Category(it[1]) to ProductFamily(it[0]) }
-                .groupBy({ it.first }, { it.second }).also(::println)
+                .groupBy({ it.first }, { it.second })
 
     }
 }
