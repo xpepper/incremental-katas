@@ -17,20 +17,19 @@ class RecordOfSales(rosFilePath: String) {
         val product = groups[1]?.value?.trim() ?: throw InvalidContentException(rawEntry)
         val quantity = groups[2]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
         val price = groups[3]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
-        return Entry(product, quantity, price)
+        return Entry(ProductItem(product), quantity, price)
     }
 
     fun withCategories(rawCategories: String) = CategorizedRecordOfSales(this, rawCategories)
 
-    private data class Entry(val product: String, val quantity: Long, val price: Long)
+    private data class Entry(val product: ProductItem, val quantity: Long, val price: Long)
 
     class CategorizedRecordOfSales(private val recordOfSales: RecordOfSales, private val rawCategories: String) {
-        fun generateReport(): String = categoriesFrom(rawCategories).joinToString("\n") { category ->
+        fun generateReport(): String = categoriesFrom(rawCategories).joinToString("\n") { (productFamily, category) ->
             recordOfSales.entries.filter {
-                val product = it.product
-                product.contains(category.first.name)
+                it.product.name.contains(productFamily.name)
             }.sumOf { it.quantity * it.price }.let {
-                "${category.second.name}: $it"
+                "${category.name}: $it"
             }
         } + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
 
@@ -48,3 +47,6 @@ value class Category(internal val name: String)
 
 @JvmInline
 value class ProductFamily(internal val name: String)
+
+@JvmInline
+value class ProductItem(internal val name: String)
