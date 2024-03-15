@@ -67,6 +67,25 @@ class CalculateROSGrandTotalIncomeTest {
         )
     }
 
+    @Test
+    fun `generate the total amount of money for a single entry and two categories`() {
+        val rosFile = writeRosFileWith(
+            """
+            bread, 3, 2
+            """
+        )
+
+        RecordOfSales(rosFile.absolutePath).withCategories(
+            """
+            bread, wheat and pasta
+            juice, drinks
+            """
+        ).generateReport() shouldBe """
+           wheat and pasta: 6
+           drinks: 0
+        """.trimIndent()
+    }
+
     private fun writeRosFileWith(fileContent: String) = File.createTempFile("ros", ".txt").apply {
         writeText(fileContent.trimIndent())
     }.also { it.deleteOnExit() }
