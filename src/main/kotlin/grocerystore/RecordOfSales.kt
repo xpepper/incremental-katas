@@ -24,19 +24,21 @@ class RecordOfSales(rosFilePath: String) {
 
 
     class CategorizedRecordOfSales(private val recordOfSales: RecordOfSales, private val rawCategories: String) {
-        fun generateReport(): String = categoriesFrom(rawCategories).joinToString("\n") { (productFamily, category) ->
+        fun generateReport(): String = categoriesFrom(rawCategories).map { (category, productFamilies) ->
             recordOfSales.entries
-                .filter { entry -> entry.product.belongsTo(productFamily) }
+                .filter { entry -> productFamilies.any { entry.product.belongsTo(it) } }
                 .grantTotalIncome()
                 .let { categoryTotal -> "${category.name}: $categoryTotal" }
-        } + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
+        }.joinToString("\n") + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
 
-        private fun categoriesFrom(rawCategories: String): List<Pair<ProductFamily, Category>> =
+        private fun categoriesFrom(rawCategories: String): Map<Category, List<ProductFamily>> =
             rawCategories.split("\n")
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
                 .map { it.split(", ") }
-                .map { ProductFamily(it[0]) to Category(it[1]) }
+                .map { Category(it[1]) to ProductFamily(it[0]) }
+                .groupBy({ it.first }, { it.second }).also(::println)
+
     }
 }
 

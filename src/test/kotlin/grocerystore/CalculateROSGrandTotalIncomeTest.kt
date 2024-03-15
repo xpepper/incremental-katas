@@ -94,6 +94,29 @@ class CalculateROSGrandTotalIncomeTest {
     }
 
     @Test
+    fun `generate the category report grouping different product families belonging to the same category`() {
+        val rosFile = writeRosFileWith(
+            """
+            milk (1L), 4, 8
+            butter (500 g), 3, 6
+            cheese (1Kg), 1, 7
+            cheese (gouda, 1Kg), 1, 5
+            """
+        )
+
+        RecordOfSales(rosFile.absolutePath).withCategories(
+            """
+            milk, dairy
+            butter, dairy
+            cheese, dairy
+            """
+        ).generateReport() shouldBe """
+            dairy: 62
+            total: 62
+        """.trimIndent()
+    }
+
+    @Test
     fun `fails when cannot parse a ROS entry`() {
         val invalidRosFile = writeRosFileWith(
             """
