@@ -26,12 +26,12 @@ class RecordOfSales(rosFilePath: String) {
 
     class CategorizedRecordOfSales(private val recordOfSales: RecordOfSales, private val rawCategories: String) {
         fun generateReport(): String = categoriesFrom(rawCategories).joinToString("\n") { (productFamily, category) ->
-            recordOfSales.entries.filter {
-                it.product.name.contains(productFamily.name)
-            }.sumOf { it.quantity * it.price }.let {
-                "${category.name}: $it"
-            }
+            recordOfSales.entries
+                .filter { (product, _, _) -> product.belongsTo(productFamily) }
+                .sumOf { (_, quantity, price) -> quantity * price }
+                .let { categoryTotal -> "${category.name}: $categoryTotal" }
         } + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
+
 
         private fun categoriesFrom(rawCategories: String): List<Pair<ProductFamily, Category>> =
             rawCategories.split("\n")
@@ -49,4 +49,6 @@ value class Category(internal val name: String)
 value class ProductFamily(internal val name: String)
 
 @JvmInline
-value class ProductItem(internal val name: String)
+value class ProductItem(private val name: String) {
+    fun belongsTo(productFamily: ProductFamily) = name.contains(productFamily.name)
+}
