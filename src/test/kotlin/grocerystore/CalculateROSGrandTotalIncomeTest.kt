@@ -52,11 +52,11 @@ class CalculateROSGrandTotalIncomeTest {
     fun `fails when cannot parse a ROS entry`() {
         val invalidRosFile = writeRosFileWith(
             """
-            invalid entry
+            invalid entry, 1aa, 2
             """
         )
-        shouldThrow<InvalidContentException> {
+        shouldThrow<NumberFormatException> {
             RecordOfSales(invalidRosFile.absolutePath)
-        }.message shouldBe "Invalid entry 'invalid entry' found in the ROS file."
+        }.message shouldBe "For input string: \"1aa\""
     }
 }
