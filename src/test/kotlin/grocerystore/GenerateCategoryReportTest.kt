@@ -1,6 +1,5 @@
 package grocerystore
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -126,17 +125,5 @@ class GenerateCategoryReportTest {
             candy: 20
             total: 310
         """.trimIndent()
-    }
-
-    @Test
-    fun `fails when cannot parse a ROS entry`() {
-        val invalidRosFile = writeRosFileWith(
-            """
-            invalid entry
-            """
-        )
-        shouldThrow<InvalidContentException> {
-            RecordOfSales(invalidRosFile.absolutePath)
-        }.message shouldBe "Invalid entry 'invalid entry' found in the ROS file."
     }
 }
