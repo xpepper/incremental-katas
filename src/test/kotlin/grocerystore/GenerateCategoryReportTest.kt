@@ -7,6 +7,24 @@ import org.junit.jupiter.api.Test
 class GenerateCategoryReportTest {
 
     @Test
+    fun `generate the category report with one entry ROS file`() {
+        val rosFile = writeRosFileWith(
+            """
+            bread, 1, 2
+            """
+        )
+
+        RecordOfSales(rosFile.absolutePath).withCategories(
+            """
+            bread, wheat and pasta
+            """
+        ).generateReport() shouldBe """
+            wheat and pasta: 2
+            total: 2
+        """.trimIndent()
+    }
+
+    @Test
     fun `generate the category report even when some categories are missing`() {
         val rosFile = writeRosFileWith(
             """
