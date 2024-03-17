@@ -31,7 +31,7 @@ class RecordOfSales(rosFilePath: String) {
                 .let { categoryTotal -> "${category.name}: $categoryTotal" }
         }.joinToString("\n") + "\ntotal: ${recordOfSales.computeGrandTotalIncome()}"
 
-        private fun categoriesFrom(rawCategories: String): Map<Category, List<ProductFamily>> =
+        private fun categoriesFrom(rawCategories: String): Map<Category, Set<ProductFamily>> =
             rawCategories.split("\n")
                 .asSequence()
                 .map { it.trim() }
@@ -39,7 +39,7 @@ class RecordOfSales(rosFilePath: String) {
                 .map { it.split(", ") }
                 .map { Category(it[1]) to ProductFamily(it[0]) }
                 .groupBy({ it.first }, { it.second })
-
+                .mapValues { (_, value) -> value.toSet() }
     }
 }
 
