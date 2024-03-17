@@ -2,7 +2,7 @@ package grocerystore
 
 import java.io.File
 
-private val quantityAndPriceRegex = Regex("""(.+),\s*(\d+),\s*(\d+)${'$'}""")
+private val quantityAndPriceRegex = Regex("""(?<product>.+),\s*(?<quantity>\d+),\s*(?<price>\d+)${'$'}""")
 
 class RecordOfSales(rosFilePath: String) {
     private val entries: List<Entry> = parseToEntries(File(rosFilePath))
@@ -14,9 +14,9 @@ class RecordOfSales(rosFilePath: String) {
     private fun parse(rawEntry: String): Entry {
         val groups = quantityAndPriceRegex.find(rawEntry)?.groups ?: throw InvalidContentException(rawEntry)
 
-        val product = groups[1]?.value?.trim() ?: throw InvalidContentException(rawEntry)
-        val quantity = groups[2]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
-        val price = groups[3]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
+        val product = groups["product"]?.value?.trim() ?: throw InvalidContentException(rawEntry)
+        val quantity = groups["quantity"]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
+        val price = groups["price"]?.value?.toLong() ?: throw InvalidContentException(rawEntry)
         return Entry(ProductItem(product), quantity, price)
     }
 
