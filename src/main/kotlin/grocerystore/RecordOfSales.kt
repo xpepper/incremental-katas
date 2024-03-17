@@ -9,7 +9,8 @@ class RecordOfSales(rosFilePath: String) {
 
     fun computeGrandTotalIncome(): Long = entries.grantTotalIncome()
 
-    private fun parseToEntries(rosFile: File): List<Entry> = rosFile.readLines().map(::parse)
+    private fun parseToEntries(rosFile: File): List<Entry> =
+        rosFile.bufferedReader().useLines { lines -> lines.map(::parse).toList() }
 
     private fun parse(rawEntry: String): Entry {
         val groups = quantityAndPriceRegex.find(rawEntry)?.groups ?: throw InvalidContentException(rawEntry)
