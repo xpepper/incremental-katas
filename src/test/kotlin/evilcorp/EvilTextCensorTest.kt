@@ -13,8 +13,11 @@ class EvilTextCensorTest {
 
     @Test
     fun `censor text with some blacklisted words`() {
-        val textCensor = EvilTextCensor(blacklistedWords = setOf("nice", "honest", "generous"))
+        val textCensor = EvilTextCensor(
+            blacklistedWords = setOf("nice", "pony", "sun", "light", "fun", "happy", "funny", "joy")
+        )
 
-        textCensor.censor("You are a nice, honest and generous person") shouldBe "You are a XXXX, XXXXXX and XXXXXXXX person"
+        textCensor.censor("Such a nice day with a bright sun, makes me happy") shouldBe
+                "Such a XXXX day with a bright XXX, makes me XXXXX"
     }
 }
