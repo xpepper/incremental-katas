@@ -22,7 +22,7 @@ class EvilTextCensorTest {
                 "Such a XXXX day with a bright XXX, makes me XXXXX"
     }
 
-    @Test @Disabled
+    @Test
     fun `censor the whole word which the blacklisted word is a prefix of`() {
         val textCensor = EvilTextCensor(setOf("friend"))
 
